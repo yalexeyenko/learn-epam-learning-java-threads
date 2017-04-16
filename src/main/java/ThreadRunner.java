@@ -3,18 +3,16 @@
  */
 public class ThreadRunner {
     public static void main(String[] args) {
-        CountDown cd = new CountDown();
-
-        Runnable r1 = () -> {
-            synchronized (cd) {
-                cd.printCount();
+        ThreadB tB = new ThreadB();
+        tB.start();
+        synchronized (tB) {
+            try {
+                System.out.println("waiting for tB thread to complete...");
+                tB.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        };
-
-        Thread t1 = new Thread(r1, "Thread 1");
-        Thread t2 = new Thread(r1, "Thread 2");
-
-        t1.start();
-        t2.start();
+            System.out.println("total: " + tB.total);
+        }
     }
 }
