@@ -2,11 +2,13 @@
  * Created by alexeyenko on 16.04.2017.
  */
 public class ThreadRunner {
-
     public static void main(String[] args) {
-        IdGenerator id = new IdGenerator();
+        CountDown cd = new CountDown();
+
         Runnable r1 = () -> {
-            System.out.println(Thread.currentThread().getName() + " , ID value: " + id.getCounter());
+            synchronized (cd) {
+                cd.printCount();
+            }
         };
 
         Thread t1 = new Thread(r1, "Thread 1");
@@ -15,5 +17,4 @@ public class ThreadRunner {
         t1.start();
         t2.start();
     }
-
 }
