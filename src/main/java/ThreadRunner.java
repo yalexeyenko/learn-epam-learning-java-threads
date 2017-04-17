@@ -1,18 +1,23 @@
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Created by alexeyenko on 16.04.2017.
  */
 public class ThreadRunner {
     public static void main(String[] args) {
-        ThreadB tB = new ThreadB();
-        tB.start();
-        synchronized (tB) {
-            try {
-                System.out.println("waiting for tB thread to complete...");
-                tB.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("total: " + tB.total);
+        // create a pool of 5 threads
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+
+        for (int i = 0; i <= 10; i++) {
+            Runnable worker = new WorkerThread("I'm thread " + i);
+            executor.execute(worker);
         }
+
+        executor.shutdown();
+
+        while (!executor.isTerminated()) {}
+
+        System.out.println("Finished all threads");
     }
 }
